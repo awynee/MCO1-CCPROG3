@@ -43,8 +43,25 @@ public class PropertyListing {
         this.basePrice = newPrice;
     }
 
-    public void addReservation(Reservation reservation) {
-        reservations.add(reservation);
+    public void addReservation(int fromDay, int toDay, double totalPrice, Guest guest) {
+        boolean dayTaken = false;
+        int i = 0;
+
+        while (i < reservations.size()) {
+            Reservation r = reservations.get(i);
+            if ((day >= r.getFromDay() && day <= r.getToDay())) {
+                dayTaken = true;
+            }
+            i++;
+        }
+
+        if (dayTaken) {
+            System.out.println("Error: Day " + day + " is already booked!");
+        } else {
+            Reservation newReservation = new Reservation(fromDay, toDay, totalPrice, guest);
+            reservations.add(newReservation);
+            System.out.println("Reservation successfully added for day " + day);
+        }
     }
 
     public void displayPropertyInfo(){
@@ -76,9 +93,8 @@ public class PropertyListing {
             }
 
             for (Reservation r : reservations) {
-                if (r.getDay() == day) {
+                if (day >= r.getFromDay() && day <= r.getToDay()) {
                     status = "Booked (" + r.getGuest().getGuestName() + ")";
-                    isBooked = true;  // mark this day as booked
                 }
             }
 
@@ -93,15 +109,17 @@ public class PropertyListing {
 
 
     public void displayDetailedPropertyInfo(int startDay, int endDay){
-        int available = 0;
-        int booked = 0;
-        for(int day = startDay; day <= endDay; day++){
-            if(availableDates.contains(day)){
-                available++;
+        for (int day = startDay; day <= endDay; day++) {
+            boolean isBooked = false;
+
+            for (Reservation r : reservations) {
+                if (day >= r.getFromDay() && day <= r.getToDay()) {
+                    isBooked = true;
+                }
             }
-            else{
-                booked++;
-            }
+
+            if (availableDates.contains(day) && !isBooked) available++;
+            else if (isBooked) booked++;
         }
 
         System.out.println("Days " + startDay + " to " + endDay + ":");

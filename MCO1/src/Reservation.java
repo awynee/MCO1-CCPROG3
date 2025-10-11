@@ -1,16 +1,18 @@
 public class Reservation {
-    private int day;
+    private int fromDay;
+    private int toDay;
     private double totalPrice;
     private Guest guest;
 
-    public Reservation(int day, double totalPrice, Guest guest) {
-        this.day = day;
+    public Reservation(int fromDay, int toDay, double totalPrice, Guest guest) {
+        this.fromDay = fromDay;
+        this.toDay = toDay;
         this.totalPrice = totalPrice;
         this.guest = guest;
     }
 
-    public int getDay() {
-        return day;
+    public int getFromDay() {
+        return fromDay;
     }
 
     public double getTotalPrice() {
@@ -21,8 +23,11 @@ public class Reservation {
         return guest;
     }
 
+    public int getToDay() { return toDay; }
+
+
     public void displayReservationInfo() {
-        System.out.println("Reservation day: " + day);
+        System.out.println("Reservation day: " + fromDay + " to " + toDay);
         System.out.println("Total price: " + totalPrice);
         System.out.println("Guest: " + guest.getGuestName());
     }
