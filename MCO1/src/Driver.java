@@ -5,6 +5,8 @@ public class Driver {
         int choice = 0;
         Menu menu = new Menu();
         Scanner scanner = new Scanner(System.in);
+        PropertyListing propertyListing = null;
+        ManageProperty manageProperty = new ManageProperty();
 
         do{
             menu.displayMainMenu();
@@ -12,18 +14,25 @@ public class Driver {
 
             switch(choice){
                 case 1:
-                    System.out.println("you chose " + choice);
+                    System.out.println("\nYou Chose: " + choice);
+                    System.out.println("\n=== CREATING PROPERTY ===");
+                    System.out.print("Enter Property Name: ");
+                    String propertyName = scanner.next();
+
+                    propertyListing = new PropertyListing(propertyName);
+                    manageProperty.addProperty(propertyListing);
+                    System.out.println("Property '" + propertyName + "' created successfully!\n");
                     break;
                 case 2:
                     System.out.println("you chose " + choice);
                     break;
                 case 3:
-                    System.out.println("you chose " + choice);
+                    System.out.println("\nYou Chose: " + choice + "\n");
+                    manageProperty.displayAllProperties();
                     break;
-                case 4:
-                    System.out.println("you chose " + choice);
-                    break;
+                default:
+                    System.out.println("\nInvalid Option! Please try again!\n");
             }
-        }while(choice != 5);
+        }while(choice != 4);
     }
 }

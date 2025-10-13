@@ -8,13 +8,10 @@ public class PropertyListing {
     private List<Reservation> reservations;
 
     public PropertyListing(String propertyName) {
-        this.propertyName = propertyName;
-        basePrice = 1500;
-        this.availableDates = new ArrayList<>();
-        this.reservations = new ArrayList<>();
+        this(propertyName, 1500);
     }
 
-    public PropertyListing(String propertyName, Double basePrice) {
+    public PropertyListing(String propertyName, double basePrice) {
         this.propertyName = propertyName;
         this.basePrice = basePrice;
         this.availableDates = new ArrayList<>();
@@ -22,16 +19,12 @@ public class PropertyListing {
     }
 
     public boolean addAvailableDate(int day) {
-        if(day < 1 || day > 30){
+        if (day < 1 || day > 30) {
             System.out.println("Invalid day: Must be between 1 and 30.");
             return false;
         }
-        if(availableDates.size() > 30){
-            System.out.println("Must have a maximum of 30 available dates.");;
-            return false;
-        }
-        if(availableDates.contains(day)){
-            System.out.println("Day" + day + " is already available.");
+        if (availableDates.contains(day)) {
+            System.out.println("Day " + day + " is already available.");
             return false;
         }
 
@@ -45,56 +38,61 @@ public class PropertyListing {
 
     public void addReservation(int fromDay, int toDay, double totalPrice, Guest guest) {
         boolean dayTaken = false;
-        int i = 0;
 
-        while (i < reservations.size()) {
-            Reservation r = reservations.get(i);
-            if ((day >= r.getFromDay() && day <= r.getToDay())) {
+        for (Reservation r : reservations) {
+            // Check for overlap with existing reservations
+            if (!(toDay < r.getFromDay() || fromDay > r.getToDay())) {
                 dayTaken = true;
+                break;
             }
-            i++;
         }
 
         if (dayTaken) {
-            System.out.println("Error: Day " + day + " is already booked!");
+            System.out.println("Error: Some of the selected days are already booked!");
         } else {
             Reservation newReservation = new Reservation(fromDay, toDay, totalPrice, guest);
             reservations.add(newReservation);
-            System.out.println("Reservation successfully added for day " + day);
+            System.out.println("Reservation successfully added for days " + fromDay + " to " + toDay);
         }
     }
 
-    public void displayPropertyInfo(){
+    public void changePropertyName(String newName) {
+        this.propertyName = newName;
+    }
+
+
+    public void displayPropertyInfo() {
         System.out.println("Property Name: " + this.propertyName);
         System.out.println("Base Price: " + this.basePrice);
         System.out.println("Available Dates: " + this.availableDates);
-        System.out.println("Reserved Dates: " + this.reservations.size());
+        System.out.println("Number of Reservations: " + this.reservations.size());
     }
 
-    public void displayHighLevelPropertyInfo(){
+    public void displayHighLevelPropertyInfo() {
         double estimatedEarning = 0;
         for (Reservation r : reservations) {
             estimatedEarning += r.getTotalPrice();
         }
-        System.out.println("Property Name: " + this.propertyName);
+
+        System.out.println("\nProperty Name: " + this.propertyName);
         System.out.println("Number of Available Dates: " + this.availableDates.size());
         System.out.println("Estimated Earnings for the Month: " + estimatedEarning);
     }
 
     public void displayCalendarView() {
-        System.out.println("Calendar View:");
+        System.out.println("\nCalendar View:");
 
         for (int day = 1; day <= 30; day++) {
-            String status = "Unavailable";
-            boolean isBooked = false;
+            String status = "Bookable";
 
             if (availableDates.contains(day)) {
-                status = "Available";
+                status = "Unavailable";
             }
 
             for (Reservation r : reservations) {
                 if (day >= r.getFromDay() && day <= r.getToDay()) {
                     status = "Booked (" + r.getGuest().getGuestName() + ")";
+                    break;
                 }
             }
 
@@ -107,34 +105,44 @@ public class PropertyListing {
         System.out.println();
     }
 
+    public void displayDetailedPropertyInfo(int startDay, int endDay) {
+        int available = 0;
+        int booked = 0;
 
-    public void displayDetailedPropertyInfo(int startDay, int endDay){
         for (int day = startDay; day <= endDay; day++) {
             boolean isBooked = false;
 
             for (Reservation r : reservations) {
                 if (day >= r.getFromDay() && day <= r.getToDay()) {
                     isBooked = true;
+                    break;
                 }
             }
 
-            if (availableDates.contains(day) && !isBooked) available++;
-            else if (isBooked) booked++;
+            if (availableDates.contains(day) && !isBooked) {
+                available++;
+            } else if (isBooked) {
+                booked++;
+            }
         }
 
-        System.out.println("Days " + startDay + " to " + endDay + ":");
+        System.out.println("\nDays " + startDay + " to " + endDay + ":");
         System.out.println("Available Dates: " + available);
         System.out.println("Booked Dates: " + booked);
     }
 
-    public void displayDateInfo(int day){
-        String status;
+    public void displayDateInfo(int day) {
+        String status = "Unavailable";
 
-        if(availableDates.contains(day)){
-            status = "Available";
+        for (Reservation r : reservations) {
+            if (day >= r.getFromDay() && day <= r.getToDay()) {
+                status = "Booked (" + r.getGuest().getGuestName() + ")";
+                break;
+            }
         }
-        else{
-            status = "Unavailable";
+
+        if (availableDates.contains(day) && !status.startsWith("Booked")) {
+            status = "Available";
         }
 
         System.out.println("Day " + day);
@@ -147,4 +155,9 @@ public class PropertyListing {
     public double getBasePrice() { return basePrice; }
 
     public List<Integer> getAvailableDates() { return availableDates; }
+
+    public List<Reservation> getReservations() {
+        return reservations;
+    }
+
 }

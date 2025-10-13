@@ -12,22 +12,16 @@ public class Reservation {
     }
 
     public int getFromDay() {
-        return fromDay;
-    }
-
-    public double getTotalPrice() {
-        return totalPrice;
-    }
-
-    public Guest getGuest() {
-        return guest;
-    }
+        return fromDay;}
 
     public int getToDay() { return toDay; }
 
+    public double getTotalPrice() { return totalPrice; }
+
+    public Guest getGuest() { return guest; }
 
     public void displayReservationInfo() {
-        System.out.println("Reservation day: " + fromDay + " to " + toDay);
+        System.out.println("Reservation: Days " + fromDay + " to " + toDay);
         System.out.println("Total price: " + totalPrice);
         System.out.println("Guest: " + guest.getGuestName());
     }

@@ -1,8 +1,11 @@
 import java.util.List;
 import java.util.ArrayList;
+import java.util.Scanner;
 
 public class ManageProperty {
     private List<PropertyListing> properties;
+    PropertyListing propertyListing = null;
+    Menu menu = new Menu();
 
     public ManageProperty() {
         this.properties = new ArrayList<>();
@@ -10,7 +13,6 @@ public class ManageProperty {
 
     public void addProperty(PropertyListing property) {
         properties.add(property);
-        System.out.println("Property '" + property.getPropertyName() + "' added successfully.");
     }
 
     public void changePropertyName(String oldName, String newName) {
@@ -33,6 +35,7 @@ public class ManageProperty {
 
     public void removeReservationByDay(PropertyListing property, int day) {
         boolean found = false;
+
         int indexToRemove = -1;
 
         List<Reservation> reservations = property.getReservations();
@@ -69,17 +72,101 @@ public class ManageProperty {
             properties.remove(indexToRemove);
             System.out.println("Property '" + propertyName + "' removed successfully.");
         } else {
-            System.out.println("No property found with name '" + propertyName + "'.");
+            System.out.println("No property found with name '" + propertyName + "'.\n");
         }
     }
 
     public void displayAllProperties() {
+        Scanner scanner = new Scanner(System.in);
+
+        System.out.println("=== DISPLAY ALL PROPERTIES ===");
         if (properties.isEmpty()) {
-            System.out.println("No properties currently managed.");
-        } else {
-            for (int i = 0; i < properties.size(); i++) {
-                PropertyListing p = properties.get(i);
-                System.out.println((i + 1) + ". " + p.getPropertyName());
+            System.out.println("No properties currently managed.\n");
+            return;
+        }
+
+        for (int i = 0; i < properties.size(); i++) {
+            PropertyListing p = properties.get(i);
+            System.out.println((i + 1) + ". " + p.getPropertyName());
+        }
+        System.out.println("X. Return to Menu");
+        System.out.println();
+        System.out.print("Enter Number to View Property Details: ");
+        String input = scanner.nextLine();
+
+        if (input.equalsIgnoreCase("X")) {
+            System.out.println("Returning to main menu...\n");
+            return;
+        }
+
+        if (!input.matches("\\d+")) {
+            System.out.println("Invalid input. Please enter a valid number or 'X' to return.\n");
+            return;
+        }
+
+        int choice = Integer.parseInt(input);
+
+        if (choice < 1 || choice > properties.size()) {
+            System.out.println("Invalid property number.\n");
+            return;
+        }
+
+        PropertyListing selectedProperty = properties.get(choice - 1);
+        System.out.println("\nYou selected: " + selectedProperty.getPropertyName());
+
+        boolean viewing = true;
+        while (viewing) {
+            menu.displayViewPropertyMenu();
+
+            System.out.print("Enter your choice: ");
+            String viewChoice = scanner.nextLine();
+
+            switch (viewChoice) {
+                case "1":
+                    selectedProperty.displayCalendarView();
+                    break;
+                case "2":
+                    selectedProperty.displayHighLevelPropertyInfo();
+                    break;
+                case "3":
+                    int startDay = 0;
+                    int endDay = 0;
+
+                    while (true) {
+                        System.out.print("\nEnter start day (1 to 30): ");
+                        if (scanner.hasNextInt()) {
+                            startDay = scanner.nextInt();
+                            if (startDay >= 1 && startDay <= 30) break;
+                        } else {
+                            scanner.next();
+                        }
+                        System.out.println("Invalid start day! Try again.");
+                    }
+
+                    while (true) {
+                        System.out.print("Enter end day (" + startDay + "to 30): ");
+                        if (scanner.hasNextInt()) {
+                            endDay = scanner.nextInt();
+                            if (endDay >= startDay && endDay <= 30)
+                                break;
+                        } else {
+                            scanner.next();
+                        }
+                        System.out.println("Invalid end day! Try again.");
+                    }
+                    scanner.nextLine();
+
+                    selectedProperty.displayDetailedPropertyInfo(startDay, endDay);
+                    break;
+
+                case "4":
+
+                case "5":
+                    viewing = false;
+                    break;
+
+                default:
+                    System.out.println("Invalid option. Try again.");
             }
         }
     }
