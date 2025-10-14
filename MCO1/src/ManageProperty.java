@@ -112,11 +112,10 @@ public class ManageProperty {
         }
 
         PropertyListing selectedProperty = properties.get(choice - 1);
-        System.out.println("\nYou selected: " + selectedProperty.getPropertyName());
 
         boolean viewing = true;
         while (viewing) {
-            menu.displayViewPropertyMenu();
+            menu.displayViewPropertyMenu(selectedProperty.getPropertyName());
 
             System.out.print("Enter your choice: ");
             String viewChoice = scanner.nextLine();
@@ -158,9 +157,8 @@ public class ManageProperty {
 
                     selectedProperty.displayDetailedPropertyInfo(startDay, endDay);
                     break;
-
                 case "4":
-
+                    break;
                 case "5":
                     viewing = false;
                     break;

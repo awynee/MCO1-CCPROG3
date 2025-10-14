@@ -17,7 +17,8 @@ public class Driver {
                     System.out.println("\nYou Chose: " + choice);
                     System.out.println("\n=== CREATING PROPERTY ===");
                     System.out.print("Enter Property Name: ");
-                    String propertyName = scanner.next();
+                    String propertyName = scanner.nextLine();
+                    propertyName = scanner.nextLine();
 
                     propertyListing = new PropertyListing(propertyName);
                     manageProperty.addProperty(propertyListing);

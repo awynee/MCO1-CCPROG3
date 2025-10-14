@@ -14,8 +14,9 @@ public class Menu {
         return scanner.nextInt();
     }
 
-    public void displayViewPropertyMenu(){
+    public void displayViewPropertyMenu(String propertyName){
         System.out.println("\n=== VIEW PROPERTY MENU ===");
+        System.out.println("Currently Viewing: " + propertyName);
         System.out.println("1. Calendar View");
         System.out.println("2. High Level Property Information");
         System.out.println("3. Detailed Information");
