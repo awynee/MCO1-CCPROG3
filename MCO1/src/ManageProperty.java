@@ -143,7 +143,7 @@ public class ManageProperty {
                     }
 
                     while (true) {
-                        System.out.print("Enter end day (" + startDay + "to 30): ");
+                        System.out.print("Enter end day (" + startDay + " to 30): ");
                         if (scanner.hasNextInt()) {
                             endDay = scanner.nextInt();
                             if (endDay >= startDay && endDay <= 30)
@@ -157,7 +157,7 @@ public class ManageProperty {
 
                     selectedProperty.displayDetailedPropertyInfo(startDay, endDay);
                     break;
-                case "4":
+                case "4": //HEYYYY
                     break;
                 case "5":
                     viewing = false;

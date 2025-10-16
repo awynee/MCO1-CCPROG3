@@ -31,6 +31,9 @@ public class Driver {
                     System.out.println("\nYou Chose: " + choice + "\n");
                     manageProperty.displayAllProperties();
                     break;
+                case 4:
+                    System.out.println("Exiting program...");
+                    break;
                 default:
                     System.out.println("\nInvalid Option! Please try again!\n");
             }
