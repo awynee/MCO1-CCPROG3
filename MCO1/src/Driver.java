@@ -25,11 +25,16 @@ public class Driver {
                     System.out.println("Property '" + propertyName + "' created successfully!\n");
                     break;
                 case 2:
-                    System.out.println("you chose " + choice);
+                    System.out.println("\nYou Chose: " + choice + "\n");
+
+
+                    menu.displayManagePropertyMenu();
+                    choice = menu.getUserChoice(scanner);
                     break;
                 case 3:
                     System.out.println("\nYou Chose: " + choice + "\n");
                     manageProperty.displayAllProperties();
+                    manageProperty.propertyMenuChoice();
                     break;
                 case 4:
                     System.out.println("Exiting program...");

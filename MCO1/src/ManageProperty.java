@@ -91,6 +91,10 @@ public class ManageProperty {
         }
         System.out.println("X. Return to Menu");
         System.out.println();
+    }
+
+    public void propertyMenuChoice(){
+        Scanner scanner = new Scanner(System.in);
         System.out.print("Enter Number to View Property Details: ");
         String input = scanner.nextLine();
 
@@ -113,21 +117,19 @@ public class ManageProperty {
 
         PropertyListing selectedProperty = properties.get(choice - 1);
 
-        boolean viewing = true;
-        while (viewing) {
+        int viewChoice = 0;
+        do{
             menu.displayViewPropertyMenu(selectedProperty.getPropertyName());
-
-            System.out.print("Enter your choice: ");
-            String viewChoice = scanner.nextLine();
+            viewChoice = menu.getUserChoice(scanner);
 
             switch (viewChoice) {
-                case "1":
+                case 1:
                     selectedProperty.displayCalendarView();
                     break;
-                case "2":
+                case 2:
                     selectedProperty.displayHighLevelPropertyInfo();
                     break;
-                case "3":
+                case 3:
                     int startDay = 0;
                     int endDay = 0;
 
@@ -157,16 +159,46 @@ public class ManageProperty {
 
                     selectedProperty.displayDetailedPropertyInfo(startDay, endDay);
                     break;
-                case "4": //HEYYYY
-                    break;
-                case "5":
-                    viewing = false;
+                case 4:
+                    startDay = 0;
+                    endDay = 0;
+
+                    scanner.nextLine();
+                    System.out.print("\nEnter Guest Name: ");
+                    String guestName = scanner.nextLine();
+                    Guest guest = new Guest(guestName);
+
+                    while (true) {
+                        System.out.print("Book day (1 to 30): ");
+                        if (scanner.hasNextInt()) {
+                            startDay = scanner.nextInt();
+                            if (startDay >= 1 && startDay <= 30) break;
+                        } else {
+                            scanner.next();
+                        }
+                        System.out.println("Invalid start day! Try again.");
+                    }
+
+                    while (true) {
+                        System.out.print("Until (" + startDay + " to 30): ");
+                        if (scanner.hasNextInt()) {
+                            endDay = scanner.nextInt();
+                            if (endDay >= startDay && endDay <= 30)
+                                break;
+                        } else {
+                            scanner.next();
+                        }
+                        System.out.println("Invalid end day! Try again.");
+                    }
+                    scanner.nextLine();
+
+                    selectedProperty.addReservation(startDay, endDay, guestName);
                     break;
 
                 default:
                     System.out.println("Invalid option. Try again.");
             }
-        }
+        }while(viewChoice != 5);
     }
 
     public List<PropertyListing> getProperties() {

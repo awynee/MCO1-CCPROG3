@@ -16,31 +16,20 @@ public class PropertyListing {
         this.basePrice = basePrice;
         this.availableDates = new ArrayList<>();
         this.reservations = new ArrayList<>();
-    }
 
-    public boolean addAvailableDate(int day) {
-        if (day < 1 || day > 30) {
-            System.out.println("Invalid day: Must be between 1 and 30.");
-            return false;
+        for (int i = 1; i <= 30; i++) {
+            availableDates.add(i);
         }
-        if (availableDates.contains(day)) {
-            System.out.println("Day " + day + " is already available.");
-            return false;
-        }
-
-        availableDates.add(day);
-        return true;
     }
 
     public void updateBasePrice(double newPrice) {
         this.basePrice = newPrice;
     }
 
-    public void addReservation(int fromDay, int toDay, double totalPrice, Guest guest) {
+    public void addReservation(int fromDay, int toDay, String guestName) {
         boolean dayTaken = false;
 
         for (Reservation r : reservations) {
-            // Check for overlap with existing reservations
             if (!(toDay < r.getFromDay() || fromDay > r.getToDay())) {
                 dayTaken = true;
                 break;
@@ -48,13 +37,23 @@ public class PropertyListing {
         }
 
         if (dayTaken) {
-            System.out.println("Error: Some of the selected days are already booked!");
-        } else {
+            System.out.println("Error: Days " + fromDay + " to " + toDay + " are already booked!");
+        }
+        else {
+            for (int day = fromDay; day <= toDay; day++) {
+                availableDates.remove(Integer.valueOf(day));
+            }
+
+            int totalDays = toDay - fromDay + 1;
+            double totalPrice = totalDays * basePrice;
+            Guest guest = new Guest(guestName);
             Reservation newReservation = new Reservation(fromDay, toDay, totalPrice, guest);
             reservations.add(newReservation);
-            System.out.println("Reservation successfully added for days " + fromDay + " to " + toDay);
+
+            System.out.println("Reservation confirmed for " + guestName + " from day " + fromDay + " to " + toDay);
         }
     }
+
 
     public void changePropertyName(String newName) {
         this.propertyName = newName;

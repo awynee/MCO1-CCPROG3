@@ -23,4 +23,13 @@ public class Menu {
         System.out.println("4. Book Property");
         System.out.println("5. Return to Menu");
     }
+
+    public void displayManagePropertyMenu(){
+        System.out.println("=== MANAGE PROPERTY MENU ===");
+        System.out.println("1. Change Property Name");
+        System.out.println("2. Update Property Base Price per Night");
+        System.out.println("3. Remove Property Reservations");
+        System.out.println("4. Remove Property");
+        System.out.println("5. Return to Menu");
+    }
 }
