@@ -40,7 +40,7 @@ public class Driver {
                     System.out.println("Exiting program...");
                     break;
                 default:
-                    System.out.println("\nInvalid Option! Please try again!\n");
+                    System.out.println("\nInvalid Option. Please try again.\n");
             }
         }while(choice != 4);
     }

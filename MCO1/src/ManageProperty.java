@@ -81,7 +81,8 @@ public class ManageProperty {
 
         System.out.println("=== DISPLAY ALL PROPERTIES ===");
         if (properties.isEmpty()) {
-            System.out.println("No properties currently managed.\n");
+            System.out.println("No properties currently managed.");
+            System.out.println("X. Return to Menu\n");
             return;
         }
 
@@ -95,24 +96,36 @@ public class ManageProperty {
 
     public void propertyMenuChoice(){
         Scanner scanner = new Scanner(System.in);
-        System.out.print("Enter Number to View Property Details: ");
-        String input = scanner.nextLine();
+
+        String input;
+        int choice = -1;
+
+        do {
+            System.out.print("Enter Number to View Property Details (or X to return): ");
+            input = scanner.nextLine();
+
+            // Check if user wants to return
+            if (input.equalsIgnoreCase("X")) {
+                System.out.println("Returning to main menu...\n");
+                return; // exits the method
+            }
+
+            // Validate numeric input
+            if (!input.matches("\\d+")) {
+                System.out.println("Invalid input. Please enter a valid number or 'X' to return.\n");
+                continue;
+            }
+
+            choice = Integer.parseInt(input);
+
+            if (choice < 1 || choice > properties.size()) {
+                System.out.println("\nInvalid property number. Please try again.\n");
+            }
+
+        } while (choice < 1 || choice > properties.size());
 
         if (input.equalsIgnoreCase("X")) {
             System.out.println("Returning to main menu...\n");
-            return;
-        }
-
-        if (!input.matches("\\d+")) {
-            System.out.println("Invalid input. Please enter a valid number or 'X' to return.\n");
-            return;
-        }
-
-        int choice = Integer.parseInt(input);
-
-        if (choice < 1 || choice > properties.size()) {
-            System.out.println("Invalid property number.\n");
-            return;
         }
 
         PropertyListing selectedProperty = properties.get(choice - 1);
@@ -196,7 +209,7 @@ public class ManageProperty {
                     break;
 
                 default:
-                    System.out.println("Invalid option. Try again.");
+                    System.out.println("\nInvalid option. Please try again.");
             }
         }while(viewChoice != 5);
     }
