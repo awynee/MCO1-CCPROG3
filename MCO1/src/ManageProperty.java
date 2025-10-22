@@ -182,7 +182,7 @@ public class ManageProperty {
                     Guest guest = new Guest(guestName);
 
                     while (true) {
-                        System.out.print("Book day (1 to 30): ");
+                        System.out.print("Book day (+1 to 30): ");
                         if (scanner.hasNextInt()) {
                             startDay = scanner.nextInt();
                             if (startDay >= 1 && startDay <= 30) break;
@@ -217,4 +217,15 @@ public class ManageProperty {
     public List<PropertyListing> getProperties() {
         return properties;
     }
+
+    public PropertyListing getPropertyByIndex(int index) {
+        if (index >= 0 && index < properties.size()) {
+            return properties.get(index);
+        }
+        return null;
+    }
+
 }
+
+
+

@@ -1,5 +1,6 @@
 import java.util.List;
 import java.util.ArrayList;
+import java.util.Scanner;
 
 public class PropertyListing {
     private String propertyName;
@@ -20,10 +21,6 @@ public class PropertyListing {
         for (int i = 1; i <= 30; i++) {
             availableDates.add(i);
         }
-    }
-
-    public void updateBasePrice(double newPrice) {
-        this.basePrice = newPrice;
     }
 
     public void addReservation(int fromDay, int toDay, String guestName) {
@@ -117,7 +114,6 @@ public class PropertyListing {
                     break;
                 }
             }
-
             if (availableDates.contains(day) && !isBooked) {
                 available++;
             } else if (isBooked) {
@@ -149,6 +145,76 @@ public class PropertyListing {
         System.out.println("Status: " + status);
     }
 
+    public void changePropertyName(List<PropertyListing> allProperties){
+        Scanner scanner = new Scanner(System.in);
+        System.out.println("Enter new Property Name: ");
+        String newPropertyName = scanner.nextLine();
+
+        //Checks for blank names
+        if (newPropertyName.isEmpty()){
+            System.out.println("Property cannot have a blank name!");
+            return;
+        }
+        //Checks for duplicate property names
+        for(PropertyListing property : allProperties){
+            if(property.getPropertyName().equalsIgnoreCase(newPropertyName)){
+                System.out.println("Property already exsists. Please choose another name");
+            }
+        }
+
+        System.out.println("Changed Property name from " + this.propertyName + " to " + newPropertyName);
+        this.setPropertyName(newPropertyName);
+    }
+
+    //CHECKS FOR ACTIVE RESERVATIONS
+    public boolean hasActiveReservations() {
+        return reservations != null && !reservations.isEmpty();
+    }
+
+    public boolean updateBasePrice(double newPrice) {
+        // Check if new price is valid
+        if (newPrice < 100.00) {
+            System.out.println("Base price must be at least ₱100.00.");
+            return false;
+        }
+
+        // Check if there are any active reservations
+        if (hasActiveReservations()) {
+            System.out.println("Cannot update base price while there are existing reservations.");
+            return false;
+        }
+
+        // Update base price
+        this.basePrice = newPrice;
+        System.out.printf("Base price successfully updated to ₱%.2f%n", newPrice);
+        return true;
+    }
+
+
+
+    public void removeReservationByDay(int day) {
+        if (reservations == null || reservations.isEmpty()) {
+            System.out.println("No reservations found for this property.");
+            return;
+        }
+
+        // Return all reserved days back to availableDates
+        for (Reservation r : reservations) {
+            for (int d = r.getFromDay(); d <= r.getToDay(); d++) {
+                if (!availableDates.contains(d)) {
+                    availableDates.add(d);
+                }
+            }
+        }
+        // Sort available dates after restoring them
+        availableDates.sort(Integer::compareTo);
+
+        // Clear all reservations
+        reservations.clear();
+        System.out.println("All reservations for this property have been removed successfully.");
+    }
+
+
     public String getPropertyName() { return propertyName; }
 
     public double getBasePrice() { return basePrice; }
@@ -157,6 +223,11 @@ public class PropertyListing {
 
     public List<Reservation> getReservations() {
         return reservations;
+    }
+
+    //setter
+    public void setPropertyName(String propertyName) {
+        this.propertyName = propertyName;
     }
 
 }
