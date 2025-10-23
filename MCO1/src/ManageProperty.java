@@ -89,10 +89,25 @@ public class ManageProperty {
         }
     }
 
+    public void displayUpdatedProperties() {
+        System.out.println("\n=== DISPLAY ALL PROPERTIES ===");
+        if (properties.isEmpty()) {
+            System.out.println("No properties currently managed.");
+            System.out.println("X. Return to Menu\n");
+            return;
+        }
+
+        for (int i = 0; i < properties.size(); i++) {
+            PropertyListing p = properties.get(i);
+            System.out.println((i + 1) + ". " + p.getPropertyName());
+        }
+    }
+
     public void displayAllProperties() {
         Scanner scanner = new Scanner(System.in);
+        menu.clearScreen();
 
-        System.out.println("=== DISPLAY ALL PROPERTIES ===");
+        System.out.println("=== UPDATED PROPERTY LIST ===");
         if (properties.isEmpty()) {
             System.out.println("No properties currently managed.");
             System.out.println("X. Return to Menu\n");
@@ -123,12 +138,16 @@ public class ManageProperty {
 
             // Check if user wants to return
             if (input.equalsIgnoreCase("X")) {
+                menu.pause(1000);
+                menu.clearScreen();
                 System.out.println("Returning to main menu...\n");
                 return; // exits the method
             }
 
             // Validate numeric input
             if (!input.matches("\\d+")) {
+                menu.pause(1000);
+                menu.clearScreen();
                 System.out.println("Invalid input. Please enter a valid number or 'X' to return.\n");
                 continue;
             }
@@ -136,31 +155,41 @@ public class ManageProperty {
             choice = Integer.parseInt(input);
 
             if (choice < 1 || choice > properties.size()) {
+                menu.pause(1000);
+                menu.clearScreen();
                 System.out.println("\nInvalid property number. Please try again.\n");
             }
 
         } while (choice < 1 || choice > properties.size());
 
         if (input.equalsIgnoreCase("X")) {
+            menu.pause(1000);
+            menu.clearScreen();
             System.out.println("Returning to main menu...\n");
         }
 
         PropertyListing selectedProperty = properties.get(choice - 1);
 
         int viewChoice = 0;
+        
         do{
+            menu.clearScreen();
             menu.displayViewPropertyMenu(selectedProperty.getPropertyName());
+
             viewChoice = menu.getUserChoice(scanner);
 
             switch (viewChoice) {
                 case 1:
                     selectedProperty.displayPropertyInfo();
+                    menu.pause(2500);
                     break;
                 case 2:
                     selectedProperty.displayCalendarView();
+                    menu.pause(2500);
                     break;
                 case 3:
                     selectedProperty.displayHighLevelPropertyInfo();
+                    menu.pause(2500);
                     break;
                 case 4:
                     int startDay = 0;
@@ -189,8 +218,9 @@ public class ManageProperty {
                         System.out.println("Invalid end day! Try again.");
                     }
                     scanner.nextLine();
-
+                    
                     selectedProperty.displayDetailedPropertyInfo(startDay, endDay);
+                    menu.pause(2500);
                     break;
                 case 5:
                     startDay = 0;
@@ -226,12 +256,13 @@ public class ManageProperty {
                     scanner.nextLine();
 
                     selectedProperty.addReservation(startDay, endDay, guestName);
+                    menu.pause(2500);
                     break;
                 case 6:
                     System.out.println("\nReturning to menu...\n");
+                    menu.pause(1000);
+                    menu.clearScreen();
                     break;
-                default:
-                    System.out.println("\nInvalid option. Please try again.");
             }
         }while(viewChoice != 6);
     }

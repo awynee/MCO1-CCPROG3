@@ -2,23 +2,16 @@ import java.util.Scanner;
 
 public class Driver {
     public static void main(String[] args) {
-        String input;
         Menu menu = new Menu();
         Scanner scanner = new Scanner(System.in);
         PropertyListing propertyListing = null;
         ManageProperty manageProperty = new ManageProperty();
         int choice = 0;
+        String input = "0";
 
         do{
             menu.displayMainMenu();
-            input = menu.getUserChoice(scanner);
-
-            try {
-                choice = Integer.parseInt(input);
-            } catch (NumberFormatException e) {
-                System.out.println("\nInvalid input! Please enter a number.\n");
-                continue;
-            }
+            choice = menu.getUserChoice(scanner);
 
             switch(choice){
                 case 1:
@@ -26,6 +19,7 @@ public class Driver {
                     menu.clearScreen();
                     System.out.println("=== CREATING PROPERTY ===");
                     System.out.print("Enter Property Name: ");
+                    scanner.nextLine();
                     String propertyName = scanner.nextLine();
 
                     propertyListing = new PropertyListing(propertyName);
@@ -48,19 +42,10 @@ public class Driver {
                     int manageChoice = 0;
                     do {
                         // Display submenu
-                        String manageInput = "0";
                         menu.displayManagePropertyMenu();
-                        manageInput = menu.getUserChoice(scanner);
+                        manageChoice = menu.getUserChoice(scanner);
+                        scanner.nextLine();
                         
-                        try {
-                            manageChoice = Integer.parseInt(manageInput);
-                        } catch (NumberFormatException e) {
-                            System.out.println("Invalid input! Please enter a number.\n");
-                            menu.pause(1000);
-                            menu.clearScreen();
-                            continue;
-                        }
-
                         menu.clearScreen();
 
                         switch (manageChoice) {
@@ -91,6 +76,8 @@ public class Driver {
                                     // Validate numeric input
                                     if (!input.matches("\\d+")) {
                                         System.out.println("Invalid input. Please enter a valid number or 'X' to return.\n");
+                                        menu.pause(1000);
+                                        menu.clearScreen();
                                         continue;
                                     }
 
@@ -108,8 +95,7 @@ public class Driver {
                                     PropertyListing selectedProperty = manageProperty.getPropertyByIndex(choice - 1);
                                     if (selectedProperty != null) {
                                         selectedProperty.changePropertyName(manageProperty.getProperties());
-                                        System.out.println("\nUpdated Property List:");
-                                        manageProperty.displayAllProperties();
+                                        manageProperty.displayUpdatedProperties();
                                         menu.pause(1500);
                                         menu.clearScreen();
                                     } else {
@@ -254,9 +240,9 @@ public class Driver {
 
                                     // Check if user wants to return
                                     if (input.equalsIgnoreCase("x")) {
+                                        System.out.println("Returning to main menu...\n");
                                         menu.pause(1000);
                                         menu.clearScreen();
-                                        System.out.println("Returning to main menu...\n");
                                         returning = true;
                                         break; // exits the method
                                     }
