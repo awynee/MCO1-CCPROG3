@@ -53,6 +53,8 @@ public class Driver {
                                 // Change Property Name
                                 if (manageProperty.getProperties().isEmpty()) {
                                     System.out.println("No properties available. Please create one first.\n");
+                                    menu.pause(1500);
+                                    menu.clearScreen();
                                     break;
                                 }
 
@@ -108,6 +110,8 @@ public class Driver {
                                 // === UPDATE BASE PRICE ===
                                 if (manageProperty.getProperties().isEmpty()) {
                                     System.out.println("No properties available. Please create one first.\n");
+                                    menu.pause(1500);
+                                    menu.clearScreen();
                                     break;
                                 }
 
@@ -175,6 +179,8 @@ public class Driver {
                                 // === REMOVE ALL RESERVATIONS ===
                                 if (manageProperty.getProperties().isEmpty()) {
                                     System.out.println("No properties available. Please create one first.\n");
+                                    menu.pause(1500);
+                                    menu.clearScreen();
                                     break;
                                 }
 

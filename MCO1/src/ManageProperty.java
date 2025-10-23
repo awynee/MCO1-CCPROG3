@@ -90,7 +90,7 @@ public class ManageProperty {
     }
 
     public void displayUpdatedProperties() {
-        System.out.println("\n=== DISPLAY ALL PROPERTIES ===");
+        System.out.println("\n=== UPDATED PROPERTY PROPERTIES ===");
         if (properties.isEmpty()) {
             System.out.println("No properties currently managed.");
             System.out.println("X. Return to Menu\n");
@@ -107,7 +107,7 @@ public class ManageProperty {
         Scanner scanner = new Scanner(System.in);
         menu.clearScreen();
 
-        System.out.println("=== UPDATED PROPERTY LIST ===");
+        System.out.println("=== DISPLAY ALL LIST ===");
         if (properties.isEmpty()) {
             System.out.println("No properties currently managed.");
             System.out.println("X. Return to Menu\n");
@@ -138,34 +138,34 @@ public class ManageProperty {
 
             // Check if user wants to return
             if (input.equalsIgnoreCase("X")) {
+                System.out.println("Returning to main menu...\n");
                 menu.pause(1000);
                 menu.clearScreen();
-                System.out.println("Returning to main menu...\n");
                 return; // exits the method
             }
 
             // Validate numeric input
             if (!input.matches("\\d+")) {
+                System.out.println("Invalid input. Please enter a valid number or 'X' to return.\n");
                 menu.pause(1000);
                 menu.clearScreen();
-                System.out.println("Invalid input. Please enter a valid number or 'X' to return.\n");
                 continue;
             }
 
             choice = Integer.parseInt(input);
 
             if (choice < 1 || choice > properties.size()) {
+                System.out.println("\nInvalid property number. Please try again.\n");
                 menu.pause(1000);
                 menu.clearScreen();
-                System.out.println("\nInvalid property number. Please try again.\n");
             }
 
         } while (choice < 1 || choice > properties.size());
 
         if (input.equalsIgnoreCase("X")) {
+            System.out.println("Returning to main menu...\n");
             menu.pause(1000);
             menu.clearScreen();
-            System.out.println("Returning to main menu...\n");
         }
 
         PropertyListing selectedProperty = properties.get(choice - 1);
