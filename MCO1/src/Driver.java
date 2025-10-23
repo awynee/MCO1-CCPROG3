@@ -57,7 +57,6 @@ public class Driver {
                                 break;
 
                             case 2:
-                                // Update Base Price
                                 // === UPDATE BASE PRICE ===
                                 if (manageProperty.getProperties().isEmpty()) {
                                     System.out.println("No properties available. Please create one first.\n");
@@ -71,7 +70,7 @@ public class Driver {
 
                                 PropertyListing propertyToUpdate = manageProperty.getPropertyByIndex(indexToUpdate - 1);
                                 if (propertyToUpdate != null) {
-                                    System.out.print("Enter new base price: ₱");
+                                    System.out.print("Enter new base price: P");
                                     double newPrice = scanner.nextDouble();
                                     scanner.nextLine(); // consume newline
 
@@ -79,7 +78,7 @@ public class Driver {
                                 } else {
                                     System.out.println("Invalid property number.\n");
                                 }
-
+                                break;
                             case 3:
                                 // === REMOVE ALL RESERVATIONS ===
                                 if (manageProperty.getProperties().isEmpty()) {

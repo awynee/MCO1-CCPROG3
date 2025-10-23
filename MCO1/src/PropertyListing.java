@@ -147,7 +147,7 @@ public class PropertyListing {
 
     public void changePropertyName(List<PropertyListing> allProperties){
         Scanner scanner = new Scanner(System.in);
-        System.out.println("Enter new Property Name: ");
+        System.out.print("Enter new Property Name: ");
         String newPropertyName = scanner.nextLine();
 
         //Checks for blank names
