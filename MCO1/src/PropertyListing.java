@@ -56,9 +56,8 @@ public class PropertyListing {
         this.propertyName = newName;
     }
 
-
     public void displayPropertyInfo() {
-        System.out.println("Property Name: " + this.propertyName);
+        System.out.println("\nProperty Name: " + this.propertyName);
         System.out.println("Base Price: " + this.basePrice);
         System.out.println("Available Dates: " + this.availableDates);
         System.out.println("Number of Reservations: " + this.reservations.size());
@@ -82,7 +81,7 @@ public class PropertyListing {
             String status = "Bookable";
 
             if (availableDates.contains(day)) {
-                status = "Unavailable";
+                status = "Available";
             }
 
             for (Reservation r : reservations) {
@@ -123,6 +122,7 @@ public class PropertyListing {
 
         System.out.println("\nDays " + startDay + " to " + endDay + ":");
         System.out.println("Available Dates: " + available);
+        System.out.println("Price Per Night: " + this.basePrice);
         System.out.println("Booked Dates: " + booked);
     }
 
@@ -155,38 +155,46 @@ public class PropertyListing {
             System.out.println("Property cannot have a blank name!");
             return;
         }
+
+        boolean change = true;
+
         //Checks for duplicate property names
         for(PropertyListing property : allProperties){
             if(property.getPropertyName().equalsIgnoreCase(newPropertyName)){
-                System.out.println("Property already exsists. Please choose another name");
+                change = false;
             }
-        }
+        } 
 
-        System.out.println("Changed Property name from " + this.propertyName + " to " + newPropertyName);
-        this.setPropertyName(newPropertyName);
+        if(change){
+            System.out.println("Changed Property name from " + this.propertyName + " to " + newPropertyName);
+            this.setPropertyName(newPropertyName);
+        }
+        else{
+            System.out.println("Property already exsists. Please choose another name!");
+        }
     }
 
     //CHECKS FOR ACTIVE RESERVATIONS
     public boolean hasActiveReservations() {
-        return reservations != null && !reservations.isEmpty();
+        boolean empty = false;
+
+        if(!reservations.isEmpty()){
+            empty = true;
+        }
+
+        return empty;
     }
 
     public boolean updateBasePrice(double newPrice) {
         // Check if new price is valid
         if (newPrice < 100.00) {
-            System.out.println("Base price must be at least ₱100.00.");
-            return false;
-        }
-
-        // Check if there are any active reservations
-        if (hasActiveReservations()) {
-            System.out.println("Cannot update base price while there are existing reservations.");
+            System.out.println("Base price must be at least P100.00.\n");
             return false;
         }
 
         // Update base price
         this.basePrice = newPrice;
-        System.out.printf("Base price successfully updated to ₱%.2f%n", newPrice);
+        System.out.printf("Base price successfully updated to P%.2f!\n\n", newPrice);
         return true;
     }
 
@@ -194,7 +202,7 @@ public class PropertyListing {
 
     public void removeReservationByDay(int day) {
         if (reservations == null || reservations.isEmpty()) {
-            System.out.println("No reservations found for this property.");
+            System.out.println("No reservations found for this property.\n");
             return;
         }
 

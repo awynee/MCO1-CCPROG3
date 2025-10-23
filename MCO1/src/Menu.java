@@ -9,19 +9,20 @@ public class Menu {
         System.out.println("4. Exit");
     }
 
-    public int getUserChoice(Scanner scanner) {
+    public String getUserChoice(Scanner scanner) {
         System.out.print("Enter choice: ");
-        return scanner.nextInt();
+        return scanner.nextLine();
     }
 
     public void displayViewPropertyMenu(String propertyName){
         System.out.println("\n=== VIEW PROPERTY MENU ===");
         System.out.println("Currently Viewing: " + propertyName);
-        System.out.println("1. Calendar View");
-        System.out.println("2. High Level Property Information");
-        System.out.println("3. Detailed Information");
-        System.out.println("4. Book Property");
-        System.out.println("5. Return to Menu");
+        System.out.println("1. Display Property Basic Information");
+        System.out.println("2. Calendar View");
+        System.out.println("3. High Level Property Information");
+        System.out.println("4. Detailed Information");
+        System.out.println("5. Book Property");
+        System.out.println("6. Return to Menu");
     }
 
     public void displayManagePropertyMenu(){
@@ -33,5 +34,16 @@ public class Menu {
         System.out.println("5. Return to Menu");
     }
 
+    public static void clearScreen() {
+        System.out.print("\033[H\033[2J");
+        System.out.flush();
+    }
 
+    public void pause(int ms) {
+        try {
+            Thread.sleep(ms);
+        } catch (InterruptedException e) {
+            Thread.currentThread().interrupt();
+        }
+    }
 }

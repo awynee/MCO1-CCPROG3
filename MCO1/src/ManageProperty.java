@@ -11,9 +11,22 @@ public class ManageProperty {
         this.properties = new ArrayList<>();
     }
 
-    public void addProperty(PropertyListing property) {
-        properties.add(property);
+    public boolean addProperty(PropertyListing property) {
+        boolean status = true;
+
+        for(PropertyListing p : properties){
+            if(property.getPropertyName().equalsIgnoreCase(p.getPropertyName())){
+                status = false;
+            }
+        }
+
+        if(status){
+            properties.add(property);
+        }
+
+        return status;
     }
+
 
     public void changePropertyName(String oldName, String newName) {
         boolean found = false;
@@ -94,6 +107,10 @@ public class ManageProperty {
         System.out.println();
     }
 
+    public int getAllProperties(){
+        return properties.size();
+    }
+
     public void propertyMenuChoice(){
         Scanner scanner = new Scanner(System.in);
 
@@ -137,12 +154,15 @@ public class ManageProperty {
 
             switch (viewChoice) {
                 case 1:
-                    selectedProperty.displayCalendarView();
+                    selectedProperty.displayPropertyInfo();
                     break;
                 case 2:
-                    selectedProperty.displayHighLevelPropertyInfo();
+                    selectedProperty.displayCalendarView();
                     break;
                 case 3:
+                    selectedProperty.displayHighLevelPropertyInfo();
+                    break;
+                case 4:
                     int startDay = 0;
                     int endDay = 0;
 
@@ -172,7 +192,7 @@ public class ManageProperty {
 
                     selectedProperty.displayDetailedPropertyInfo(startDay, endDay);
                     break;
-                case 4:
+                case 5:
                     startDay = 0;
                     endDay = 0;
 
@@ -182,7 +202,7 @@ public class ManageProperty {
                     Guest guest = new Guest(guestName);
 
                     while (true) {
-                        System.out.print("Book day (+1 to 30): ");
+                        System.out.print("Book day (1 to 30): ");
                         if (scanner.hasNextInt()) {
                             startDay = scanner.nextInt();
                             if (startDay >= 1 && startDay <= 30) break;
@@ -207,11 +227,13 @@ public class ManageProperty {
 
                     selectedProperty.addReservation(startDay, endDay, guestName);
                     break;
-
+                case 6:
+                    System.out.println("\nReturning to menu...\n");
+                    break;
                 default:
                     System.out.println("\nInvalid option. Please try again.");
             }
-        }while(viewChoice != 5);
+        }while(viewChoice != 6);
     }
 
     public List<PropertyListing> getProperties() {
@@ -224,7 +246,6 @@ public class ManageProperty {
         }
         return null;
     }
-
 }
 
 

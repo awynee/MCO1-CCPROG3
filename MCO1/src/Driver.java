@@ -2,36 +2,66 @@ import java.util.Scanner;
 
 public class Driver {
     public static void main(String[] args) {
-        int choice = 0;
+        String input;
         Menu menu = new Menu();
         Scanner scanner = new Scanner(System.in);
         PropertyListing propertyListing = null;
         ManageProperty manageProperty = new ManageProperty();
+        int choice = 0;
 
         do{
             menu.displayMainMenu();
-            choice = menu.getUserChoice(scanner);
+            input = menu.getUserChoice(scanner);
+
+            try {
+                choice = Integer.parseInt(input);
+            } catch (NumberFormatException e) {
+                System.out.println("\nInvalid input! Please enter a number.\n");
+                continue;
+            }
 
             switch(choice){
                 case 1:
                     System.out.println("\nYou Chose: " + choice);
-                    System.out.println("\n=== CREATING PROPERTY ===");
+                    menu.clearScreen();
+                    System.out.println("=== CREATING PROPERTY ===");
                     System.out.print("Enter Property Name: ");
                     String propertyName = scanner.nextLine();
-                    propertyName = scanner.nextLine();
 
                     propertyListing = new PropertyListing(propertyName);
-                    manageProperty.addProperty(propertyListing);
-                    System.out.println("Property '" + propertyName + "' created successfully!\n");
+                    if(manageProperty.addProperty(propertyListing)){
+                        System.out.println("Property '" + propertyName + "' created successfully!\n");
+                        menu.pause(1000);
+                        menu.clearScreen();
+                    }
+                    else{
+                        System.out.println("Property '" + propertyName + "' already exists!\n");
+                        menu.pause(1000);
+                        menu.clearScreen();
+                    }
+
                     break;
                 case 2:
                     System.out.println("\nYou Chose: " + choice + "\n");
+                    menu.clearScreen();
 
-                    int manageChoice;
+                    int manageChoice = 0;
                     do {
                         // Display submenu
+                        String manageInput = "0";
                         menu.displayManagePropertyMenu();
-                        manageChoice = menu.getUserChoice(scanner);
+                        manageInput = menu.getUserChoice(scanner);
+                        
+                        try {
+                            manageChoice = Integer.parseInt(manageInput);
+                        } catch (NumberFormatException e) {
+                            System.out.println("Invalid input! Please enter a number.\n");
+                            menu.pause(1000);
+                            menu.clearScreen();
+                            continue;
+                        }
+
+                        menu.clearScreen();
 
                         switch (manageChoice) {
                             case 1:
@@ -41,18 +71,50 @@ public class Driver {
                                     break;
                                 }
 
-                                manageProperty.displayAllProperties();
-                                System.out.print("Enter the number of the property you want to rename: ");
-                                int index = scanner.nextInt();
-                                scanner.nextLine(); // consume newline
+                                choice = -1;
+                                boolean returning = false;
 
-                                PropertyListing selectedProperty = manageProperty.getPropertyByIndex(index - 1);
-                                if (selectedProperty != null) {
-                                    selectedProperty.changePropertyName(manageProperty.getProperties());
-                                    System.out.println("\nUpdated Property List:");
+                                do {
                                     manageProperty.displayAllProperties();
-                                } else {
-                                    System.out.println("Invalid property number.\n");
+                                    System.out.print("Enter the Number of the Property to be Renamed (or X to return): ");
+                                    input = scanner.next();
+
+                                    // Check if user wants to return
+                                    if (input.equalsIgnoreCase("x")) {
+                                        System.out.println("Returning to main menu...\n");
+                                        menu.pause(1000);
+                                        menu.clearScreen();
+                                        returning = true;
+                                        break; // exits the method
+                                    }
+
+                                    // Validate numeric input
+                                    if (!input.matches("\\d+")) {
+                                        System.out.println("Invalid input. Please enter a valid number or 'X' to return.\n");
+                                        continue;
+                                    }
+
+                                    choice = Integer.parseInt(input);
+
+                                    if (choice < 1 || choice > manageProperty.getAllProperties()) {
+                                        System.out.println("Invalid property number. Please try again.\n");
+                                        menu.pause(1000);
+                                        menu.clearScreen();
+                                    }
+
+                                } while (choice < 1 || choice > manageProperty.getAllProperties());
+
+                                if(!returning){
+                                    PropertyListing selectedProperty = manageProperty.getPropertyByIndex(choice - 1);
+                                    if (selectedProperty != null) {
+                                        selectedProperty.changePropertyName(manageProperty.getProperties());
+                                        System.out.println("\nUpdated Property List:");
+                                        manageProperty.displayAllProperties();
+                                        menu.pause(1500);
+                                        menu.clearScreen();
+                                    } else {
+                                        System.out.println("Invalid property number.\n");
+                                    }
                                 }
                                 break;
 
@@ -63,20 +125,64 @@ public class Driver {
                                     break;
                                 }
 
-                                manageProperty.displayAllProperties();
-                                System.out.print("Enter the number of the property to update base price: ");
-                                int indexToUpdate = scanner.nextInt();
-                                scanner.nextLine(); // consume newline
+                                choice = -1;
+                                returning = false;
+                                
+                                do {
+                                    manageProperty.displayAllProperties();
+                                    System.out.print("Enter the number of the property to update base price (or X to return): ");
+                                    input = scanner.next();
 
-                                PropertyListing propertyToUpdate = manageProperty.getPropertyByIndex(indexToUpdate - 1);
-                                if (propertyToUpdate != null) {
-                                    System.out.print("Enter new base price: P");
-                                    double newPrice = scanner.nextDouble();
-                                    scanner.nextLine(); // consume newline
+                                    // Check if user wants to return
+                                    if (input.equalsIgnoreCase("x")) {
+                                        System.out.println("Returning to main menu...\n");
+                                        menu.pause(1000);
+                                        menu.clearScreen();
+                                        returning = true;
+                                        break; // exits the method
+                                    }
 
-                                    propertyToUpdate.updateBasePrice(newPrice);
-                                } else {
-                                    System.out.println("Invalid property number.\n");
+                                    // Validate numeric input
+                                    if (!input.matches("\\d+")) {
+                                        System.out.println("Invalid input. Please enter a valid number or 'X' to return.\n");
+                                        menu.pause(1000);
+                                        menu.clearScreen();
+                                        continue;
+                                    }
+
+                                    choice = Integer.parseInt(input);
+
+                                    if (choice < 1 || choice > manageProperty.getAllProperties()) {
+                                        System.out.println("Invalid property number. Please try again.\n");
+                                        menu.pause(1000);
+                                        menu.clearScreen();
+                                    }
+
+                                } while (choice < 1 || choice > manageProperty.getAllProperties());
+
+                                if(!returning){
+                                    PropertyListing propertyToUpdate = manageProperty.getPropertyByIndex(choice - 1);
+                                    double newPrice = 0;
+                                    if (propertyToUpdate != null) {
+                                        if(propertyToUpdate.hasActiveReservations()){
+                                            System.out.println("Cannot update base price while there are existing reservations.\n");
+                                            menu.pause(1000);
+                                            menu.clearScreen();
+                                        }
+                                        else{
+                                            System.out.print("Enter new base price: P");
+                                            newPrice = scanner.nextDouble();
+                                            scanner.nextLine(); // consume newline
+                                            propertyToUpdate.updateBasePrice(newPrice);
+                                            menu.pause(1000);
+                                            menu.clearScreen();
+                                        }
+ 
+                                    } else {
+                                        menu.pause(1000);
+                                        menu.clearScreen();
+                                        System.out.println("Invalid property number.\n");
+                                    }
                                 }
                                 break;
                             case 3:
@@ -86,36 +192,111 @@ public class Driver {
                                     break;
                                 }
 
-                                manageProperty.displayAllProperties();
-                                System.out.print("Enter the number of the property to clear all reservations: ");
-                                int indexForReservation = scanner.nextInt();
-                                scanner.nextLine(); // consume newline
+                                choice = -1;
+                                returning = false;
 
-                                PropertyListing propertyForReservation = manageProperty.getPropertyByIndex(indexForReservation - 1);
-                                if (propertyForReservation != null) {
-                                    propertyForReservation.removeReservationByDay(0);
-                                    // 'day' parameter is ignored now, since method removes all reservations
-                                } else {
-                                    System.out.println("Invalid property number.\n");
+                                do {
+                                    manageProperty.displayAllProperties();
+                                    System.out.print("Enter the number of the property to remove reservations (or X to return): ");
+                                    input = scanner.next();
+
+                                    // Check if user wants to return
+                                    if (input.equalsIgnoreCase("x")) {
+                                        System.out.println("Returning to main menu...\n");
+                                        menu.pause(1000);
+                                        menu.clearScreen();
+                                        returning = true;
+                                        break; // exits the method
+                                    }
+
+                                    // Validate numeric input
+                                    if (!input.matches("\\d+")) {
+                                        System.out.println("Invalid input. Please enter a valid number or 'X' to return.\n");
+                                        menu.pause(1000);
+                                        menu.clearScreen();
+                                        continue;
+                                    }
+
+                                    choice = Integer.parseInt(input);
+
+                                    if (choice < 1 || choice > manageProperty.getAllProperties()) {
+                                        System.out.println("Invalid property number. Please try again.\n");
+                                        menu.pause(1000);
+                                        menu.clearScreen();
+                                    }
+
+                                } while (choice < 1 || choice > manageProperty.getAllProperties());
+                                
+                                if(!returning){
+                                    PropertyListing propertyForReservation = manageProperty.getPropertyByIndex(choice - 1);
+                                    if (propertyForReservation != null) {
+                                        propertyForReservation.removeReservationByDay(0);
+                                        menu.pause(1000);
+                                        menu.clearScreen();
+                                        // 'day' parameter is ignored now, since method removes all reservations
+                                    } else {
+                                        System.out.println("Invalid property number.\n");
+                                        menu.pause(1000);
+                                        menu.clearScreen();
+                                    }
                                 }
                                 break;
 
                             case 4:
-                                manageProperty.displayAllProperties();
-                                System.out.print("Enter the number of the property you want to remove: ");
-                                int removeIndex = scanner.nextInt();
-                                scanner.nextLine(); // consume newline
+                                choice = -1;
+                                returning = false;
 
-                                if (removeIndex < 1 || removeIndex > manageProperty.getProperties().size()) {
-                                    System.out.println("Invalid property number.\n");
-                                } else {
-                                    PropertyListing removed = manageProperty.getProperties().remove(removeIndex - 1);
-                                    System.out.println("Property '" + removed.getPropertyName() + "' has been removed successfully.\n");
+                                
+                                do {
+                                    manageProperty.displayAllProperties();
+                                    System.out.print("Enter the number of the property to remove reservations (or X to return): ");
+                                    input = scanner.next();
+
+                                    // Check if user wants to return
+                                    if (input.equalsIgnoreCase("x")) {
+                                        menu.pause(1000);
+                                        menu.clearScreen();
+                                        System.out.println("Returning to main menu...\n");
+                                        returning = true;
+                                        break; // exits the method
+                                    }
+
+                                    // Validate numeric input
+                                    if (!input.matches("\\d+")) {
+                                        System.out.println("Invalid input. Please enter a valid number or 'X' to return.\n");
+                                        menu.pause(1000);
+                                        menu.clearScreen();
+                                        continue;
+                                    }
+
+                                    choice = Integer.parseInt(input);
+
+                                    if (choice < 1 || choice > manageProperty.getAllProperties()) {
+                                        System.out.println("Invalid property number. Please try again.\n");
+                                        menu.pause(1000);
+                                        menu.clearScreen();
+                                    }
+
+                                } while (choice < 1 || choice > manageProperty.getAllProperties());
+
+                                if(!returning){
+                                    if (choice < 1 || choice > manageProperty.getProperties().size()) {
+                                        System.out.println("Invalid property number.\n");
+                                        menu.pause(1000);
+                                        menu.clearScreen();
+                                    } else {
+                                        PropertyListing removed = manageProperty.getProperties().remove(choice - 1);
+                                        System.out.println("Property '" + removed.getPropertyName() + "' has been removed successfully.\n");
+                                        menu.pause(1000);
+                                        menu.clearScreen();
+                                    }
                                 }
                                 break;
 
                             case 5:
                                 System.out.println("Returning to main menu...\n");
+                                menu.pause(1000);
+                                menu.clearScreen();
                                 break;
 
                             default:
